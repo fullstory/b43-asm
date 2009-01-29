@@ -4,6 +4,8 @@ Priority: extra
 Maintainer: Stefan Lippers-Hollmann <s.l-h@gmx.de>
 Build-Depends: debhelper (>= 7), bison, flex
 Standards-Version: 3.8.0
+Vcs-Svn: svn://svn.berlios.de/fullstory/b43-asm/trunk
+Vcs-Browser: http://svn.berlios.de/wsvn/fullstory/b43-asm/trunk
 
 Package: b43-asm
 Architecture: any

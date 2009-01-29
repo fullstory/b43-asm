@@ -1,3 +1,13 @@
+b43-asm (0~20080619-0+c0.sidux.4) UNRELEASED; urgency=low
+
+  * NOT RELEASED YET
+  * add Vcs-Svn/ Vcs-Browser locations.
+  * use machine-interpretable for debian/copyright, and ammend all copyright
+    holders of include/linux/list.h until kernel 2.6.0-test1 by using the
+    historical git trees for information.
+
+ -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Thu, 29 Jan 2009 23:02:49 +0100
+
 b43-asm (0~20080619-0+c0.sidux.3) unstable; urgency=low
 
   * fix CFLAGS for b43-asm/ b43-dasm.

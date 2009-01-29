@@ -1,30 +1,46 @@
-This package was debianized by:
-    Stefan Lippers-Hollmann <s.l-h@gmx.de> on Fri, 23 Jan 2009 19:31:40 +0100
-
-It was downloaded from:
-    http://bu3sch.de
-    http://git.bu3sch.de/git/b43-tools.git
-
-Copyright:
-    Copyright © 2006-2008 Michael Buesch <mb@bu3sch.de>
-
-License:
-   This package is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License version 2 as
-   published by the Free Software Foundation.
-
-    This package is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this package; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
-
-On Debian systems, the complete text of the GNU General
-Public License can be found in '/usr/share/common-licenses/GPL-2'.
-
-The Debian packaging is:
-    Copyright © 2009, Stefan Lippers-Hollmann <s.l-h@gmx.de>
-    and is licensed under the GPL2, see above.
+Format-Specification: http://wiki.debian.org/Proposals/CopyrightFormat?action=recall&rev=428
+Upstream-Name: b43-tools/assembler, b43-tools/disassembler
+Upstream-Maintainer: Michael Buesch <mb@bu3sch.de>
+Upstream-Source: http://git.bu3sch.de/git/b43-tools.git
+Files: *
+Copyright: Copyright © 2006-2008, Michael Buesch <mb@bu3sch.de>
+License: GPL-2
+  This package is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License version 2 as
+  published by the Free Software Foundation.
+  .
+  This package is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  .
+  You should have received a copy of the GNU General Public License
+  along with this package; if not, write to the Free Software
+  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
+  .
+  On Debian systems, the complete text of the GNU General
+  Public License can be found in '/usr/share/common-licenses/GPL-2'.
+Files: assembler/list.h, disassembler/list.h
+Copyright: Copyright © 1996-2003, Linus Torvalds <torvalds@linux-foundation.org>
+Copyright: Copyright © 2002-2003, Andrew Morton <akpm@linux-foundation.org>
+Copyright: Copyright © 2002, Dan Aloni <da-x@gmx.net>
+Copyright: Copyright © 2002, Neil Brown <neilb@cse.unsw.edu.au>
+Copyright: Copyright © 2002-2003, Rusty Russell <rusty@rustcorp.com.au>
+Copyright: Copyright © 2002, Ingo Molnar <mingo@elte.hu>
+Copyright: Copyright © 2002, Dipankar Sarma <dipankar@in.ibm.com>
+Copyright: Copyright © 2002, Christoph Hellwig <hch@infradead.org>
+Copyright: Copyright © 2003, Andi Kleen <andi@firstfloor.org>
+Copyright: Copyright © 2003, Anton Blanchard <anton@samba.org>
+Copyright: Copyright © 2003, Greg Ungerer <gerg@snapgear.com>
+Copyright: Copyright © 2003, Stephen Hemminger <stephen.hemminger@vyatta.com>
+Copyright: Copyright © 2003, Arnaldo Carvalho de Melo <acme@redhat.com>
+Copyright: Copyright © 2003, Patrick Mochel <mochel@osdl.org>
+Copyright: Copyright © 2003, Julian Anastasov <ja@ssi.bg>
+License: GPL-2
+  On Debian systems, the complete text of the GNU General
+  Public License can be found in '/usr/share/common-licenses/GPL-2'.
+Files: debian/*
+Copyright: Copyright © 2009, Stefan Lippers-Hollmann <s.l-h@gmx.de>
+License: GPL-2
+  On Debian systems, the complete text of the GNU General
+  Public License can be found in '/usr/share/common-licenses/GPL-2'.
