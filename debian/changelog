@@ -5,8 +5,9 @@ b43-asm (0~20080619-0+c0.sidux.4) UNRELEASED; urgency=low
   * use machine-interpretable for debian/copyright, and ammend all copyright
     holders of include/linux/list.h until kernel 2.6.0-test1 by using the
     historical git trees for information.
+  * enhance long description.
 
- -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Thu, 29 Jan 2009 23:02:49 +0100
+ -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Thu, 29 Jan 2009 23:13:41 +0100
 
 b43-asm (0~20080619-0+c0.sidux.3) unstable; urgency=low
 

@@ -11,4 +11,8 @@ Package: b43-asm
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, gcc, python
 Description: assembler and disassembler for Broadcom BCM43xx firmware
- It is capable of compiling the opensource firmware for Linux' b43 driver.
+ b43-asm is an (dis-)assembler for Broadcom/ AirForce BCM43xx wireless lan 
+ chipsets with a core revision >= 5.
+ .
+ It is capable of compiling and disassembling the opensource 'OpenFWWF' 
+ firmware used by Linux' b43 driver.
