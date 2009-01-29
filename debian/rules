@@ -1,0 +1,72 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+# Sample debian/rules that uses debhelper.
+# This file was originally written by Joey Hess and Craig Small.
+# As a special exception, when this file is copied by dh-make into a
+# dh-make output file, you may use that output file without restriction.
+# This special exception was added by Craig Small in version 0.37 of dh-make.
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+build: build-stamp
+
+build-stamp:
+	dh_testdir
+	
+	# Add here commands to compile the package.
+	@echo "CFLAGS=$(CFLAGS)"
+	$(MAKE) -C assembler CFLAGS="$(CFLAGS) -fomit-frame-pointer -std=c99 -Wall -D_BSD_SOURCE -D_GNU_SOURCE -DYYSTYPE='void *' -DYYERROR_VERBOSE -DYYDEBUG -Wno-unused"
+	$(MAKE) -C disassembler CFLAGS="$(CFLAGS) -fomit-frame-pointer -std=gnu99 -Wall -D_BSD_SOURCE -D_GNU_SOURCE"
+	
+	touch $@
+
+clean:
+	dh_testdir
+	dh_testroot
+	rm -f build-stamp selftest test.fw
+	
+	# Add here commands to clean up after the build process.
+	$(MAKE) -C assembler distclean
+	$(MAKE) -C disassembler distclean
+	
+	dh_clean 
+
+install: build selftest
+	dh_testdir
+	dh_testroot
+	dh_prep  
+	dh_installdirs
+	
+	# Add here commands to install the package into debian/b43-asm.
+	$(MAKE) -C assembler PREFIX=$(CURDIR)/debian/b43-asm/usr install
+	$(MAKE) -C disassembler PREFIX=$(CURDIR)/debian/b43-asm/usr install
+
+binary-indep: install
+
+binary-arch: install
+	dh_testdir
+	dh_testroot
+	dh_installchangelogs 
+	dh_installdocs
+	#dh_installexamples
+	#dh_install
+	#dh_installman
+	dh_link
+	dh_strip
+	dh_compress
+	dh_fixperms
+	dh_installdeb
+	dh_shlibdeps
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+selftest:
+	PATH=$(CURDIR)/assembler:$(PATH) b43-asm assembler/test.asm test.fw --cpp-args -DDEBUG=1 -- --ivalext .fw --psize
+	PATH=$(CURDIR)/assembler:$(CURDIR)/disassembler:$(PATH) $(CURDIR)/assembler/selftest.sh test.fw
+	
+	touch $@
+
+binary: binary-indep binary-arch
+.PHONY: build clean binary-indep binary-arch binary install

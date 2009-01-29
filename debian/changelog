@@ -1,0 +1,18 @@
+b43-asm (0~20080619-0+c0.sidux.3) unstable; urgency=low
+
+  * fix CFLAGS for b43-asm/ b43-dasm.
+
+ -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Sat, 24 Jan 2009 02:53:26 +0100
+
+b43-asm (0~20080619-0+c0.sidux.2) unstable; urgency=low
+
+  * add testsuite target "selftest" and run it during the build.
+  * add gcc to dependencies.
+
+ -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Sat, 24 Jan 2009 01:19:59 +0100
+
+b43-asm (0~20080619-0+c0.sidux.1) unstable; urgency=low
+
+  * Initial release.
+
+ -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Fri, 23 Jan 2009 21:37:05 +0100

@@ -1,0 +1,12 @@
+Source: b43-asm
+Section: devel
+Priority: extra
+Maintainer: Stefan Lippers-Hollmann <s.l-h@gmx.de>
+Build-Depends: debhelper (>= 7), bison, flex
+Standards-Version: 3.8.0
+
+Package: b43-asm
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, gcc, python
+Description: assembler and disassembler for Broadcom BCM43xx firmware
+ It is capable of compiling the opensource firmware for Linux' b43 driver.
