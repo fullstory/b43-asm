@@ -1,0 +1,31 @@
+.TH b43-asm "1" "January 2009" "b43-asm.bin INPUT_FILE OUTPUT_FILE [OPTIONS]" "User Commands (1)"
+.SH NAME
+b43-asm - assembler for Broadcom/ AirForce BCM43xx wlan chipsets
+.SH SYNOPSIS
+.B b43-asm
+\fIINPUT_FILE OUTPUT_FILE \fR[\fIOPTIONS\fR]
+.SH DESCRIPTION
+`b43-asm', as wrapper for b43-asm.bin, it is intended to compile the firmware 
+assembley code into usable microcode for Broadcom/ AirForce BCM43xx wlan
+chipsets with a core revision >= 5.
+.TP
+\fB\-h\fR|\-\-help
+Print this help
+.TP
+\fB\-d\fR|\-\-debug
+Print verbose debugging info
+Repeat for more verbose debugging
+.TP
+\fB\-s\fR|\-\-psize
+Print the size of the code after assembling
+.TP
+\fB\-e\fR|\-\-ivalext EXT
+Filename extension for the initvals
+.SH "SEE ALSO"
+.BR b43-dasm
+.BR b43-ivaldump
+.SH AUTHOR
+b43-asm has been written by Michael Buesch <mb@bu3sch.de>
+.PP
+This manual has been written by Stefan Lippers-Hollmann <s.l-h@gmx.de> for 
+the Debian project (but may be used by others).

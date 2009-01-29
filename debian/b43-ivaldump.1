@@ -1,0 +1,24 @@
+.TH b43-ivaldump "1" "January 2009" "b43-ivaldump FILE" "User Commands (1)"
+.SH NAME
+b43-ivaldump - initvals file dumper for Broadcom/ AirForce BCM43xx wlan firmwares
+.SH SYNOPSIS
+.B b43-ivaldump
+\fIFILE
+.SH DESCRIPTION
+`b43-ivaldump' allows dumping the initvals of the microcode for Broadcom/ 
+AirForce BCM43xx wlan chipsets with a core revision >= 5.
+.SH EXAMPLES
+.LP
+The dump will look like this:
+.RS 8
+XX-bit  0xDEAD -> 0xBEEF
+.RE
+This is an XX-bit write of the value 0xDEAD to register 0xBEEF
+.SH "SEE ALSO"
+.BR b43-asm
+.BR b43-dasm
+.SH AUTHOR
+b43-ivaldump has been written by Michael Buesch <mb@bu3sch.de>
+.PP
+This manual has been written by Stefan Lippers-Hollmann <s.l-h@gmx.de> for 
+the Debian project (but may be used by others).

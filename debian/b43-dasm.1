@@ -1,0 +1,34 @@
+.TH b43-dasm "1" "January 2009" "b43-dasm INPUT_FILE OUTPUT_FILE [OPTIONS]" "User Commands (1)"
+.SH NAME
+b43-dasm - microcode disassembler for Broadcom/ AirForce BCM43xx wlan chipsets
+.SH SYNOPSIS
+.B b43-dasm
+\fIINPUT_FILE OUTPUT_FILE \fR[\fIOPTIONS\fR]
+.SH DESCRIPTION
+`b43-dasm' allows to disassemble the microcode used for Broadcom/ AirForce 
+BCM43xx wlan firmware files into readable assembley code for chipsets with a 
+core revision >= 5.
+.TP
+\fB\-a\fR|\-\-arch ARCH
+The architecture type of the input file
+.TP
+\fB\-h\fR|\-\-help
+Print this help
+.TP
+\fB\-\-nohdr\fR
+The input file does not have a header
+.TP
+\fB\-\-paddr\fR
+Print the code addresses
+.TP
+\fB\-d\fR|\-\-debug
+Print verbose debugging info
+Repeat for more verbose debugging
+.SH "SEE ALSO"
+.BR b43-asm
+.BR b43-ivaldump
+.SH AUTHOR
+b43-dasm has been written by Michael Buesch <mb@bu3sch.de>
+.PP
+This manual has been written by Stefan Lippers-Hollmann <s.l-h@gmx.de> for 
+the Debian project (but may be used by others).
