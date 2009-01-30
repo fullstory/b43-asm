@@ -49,7 +49,7 @@ binary-arch: install
 	dh_testroot
 	dh_installchangelogs 
 	dh_installdocs
-	#dh_installexamples
+	dh_installexamples
 	#dh_install
 	dh_installman
 	dh_link
