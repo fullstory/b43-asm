@@ -1,9 +1,8 @@
-b43-asm (0~20080619-0+c0.sidux.5) UNRELEASED; urgency=low
+b43-asm (0~20080619-0+c0.sidux.5) unstable; urgency=low
 
-  * NOT RELEASED YET
   * remove boilerplate comments from debian/rules.
 
- -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Sun, 01 Feb 2009 01:08:01 +0100
+ -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Sun, 01 Feb 2009 04:16:45 +0100
 
 b43-asm (0~20080619-0+c0.sidux.4) unstable; urgency=low
 
