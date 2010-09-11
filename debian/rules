@@ -22,12 +22,12 @@ clean:
 	$(MAKE) -C assembler distclean
 	$(MAKE) -C disassembler distclean
 	
-	dh_clean 
+	dh_clean
 
 install: build selftest
 	dh_testdir
 	dh_testroot
-	dh_prep  
+	dh_prep
 	dh_installdirs
 	
 	$(MAKE) -C assembler PREFIX=$(CURDIR)/debian/b43-asm/usr install
@@ -38,7 +38,7 @@ binary-indep: install
 binary-arch: install
 	dh_testdir
 	dh_testroot
-	dh_installchangelogs 
+	dh_installchangelogs
 	dh_installdocs
 	dh_installexamples
 	#dh_install
