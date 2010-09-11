@@ -1,8 +1,8 @@
-b43-asm (0~20080619-0+c0.sidux.7) UNRELEASED; urgency=low
+b43-asm (0~20080619-0+c0.sidux.7) unstable; urgency=low
 
-  * NOT RELEASED YET
+  * bump standards version to 3.9.1, no changes necessary.
 
- -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Thu, 22 Jul 2010 01:06:38 +0200
+ -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Tue, 03 Aug 2010 15:37:57 +0200
 
 b43-asm (0~20080619-0+c0.sidux.6) unstable; urgency=low
 
