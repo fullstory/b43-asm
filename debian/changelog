@@ -1,8 +1,11 @@
-b43-asm (0~20080619-0+c0.sidux.6) UNRELEASED; urgency=low
+b43-asm (0~20080619-0+c0.sidux.6) unstable; urgency=low
 
-  * NOT RELEASED YET
+  * switch to dpkg-source 3.0 (quilt) format.
+  * bump standards version to 3.9.0, no changes necessary.
+  * update copyright years.
+  * fold build-/ dependencies in debian/control.
 
- -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Sun, 01 Feb 2009 04:18:28 +0100
+ -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Thu, 22 Jul 2010 01:00:29 +0200
 
 b43-asm (0~20080619-0+c0.sidux.5) unstable; urgency=low
 

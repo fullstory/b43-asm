@@ -2,14 +2,19 @@ Source: b43-asm
 Section: devel
 Priority: extra
 Maintainer: Stefan Lippers-Hollmann <s.l-h@gmx.de>
-Build-Depends: debhelper (>= 7), bison, flex
-Standards-Version: 3.8.0
+Build-Depends: debhelper (>= 7),
+ bison,
+ flex
+Standards-Version: 3.9.0
 Vcs-Svn: svn://svn.berlios.de/fullstory/b43-asm/trunk
 Vcs-Browser: http://svn.berlios.de/wsvn/fullstory/b43-asm/trunk
 
 Package: b43-asm
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, gcc, python
+Depends: ${shlibs:Depends},
+ ${misc:Depends},
+ gcc,
+ python
 Description: assembler and disassembler for Broadcom BCM43xx firmware
  b43-asm is an (dis-)assembler for Broadcom AirForce BCM43xx wireless lan 
  chipsets with a core revision >= 5.
