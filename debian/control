@@ -2,7 +2,7 @@ Source: b43-asm
 Section: devel
 Priority: extra
 Maintainer: Stefan Lippers-Hollmann <s.l-h@gmx.de>
-Build-Depends: debhelper (>= 7),
+Build-Depends: debhelper (>= 7.9.3),
  bison,
  flex
 Standards-Version: 3.9.1

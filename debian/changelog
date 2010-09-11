@@ -1,11 +1,11 @@
-b43-asm (0~20080619-0+c0.sidux.8) UNRELEASED; urgency=low
+b43-asm (0~20080619-0+c0.sidux.8) unstable; urgency=low
 
-  * NOT RELEASED YET
   * fix git:// upstream URL to the new address.
   * update copyright years.
   * update machine-readable debian/copyright to DEP: 5, rev=135
+  * switch to compat level 8.
 
- -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Thu, 05 Aug 2010 00:40:24 +0200
+ -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Sun, 08 Aug 2010 03:25:33 +0200
 
 b43-asm (0~20080619-0+c0.sidux.7) unstable; urgency=low
 
