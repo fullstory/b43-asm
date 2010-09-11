@@ -1,3 +1,9 @@
+b43-asm (0~20080619-0+c0.sidux.9) UNRELEASED; urgency=low
+
+  * NOT RELEASED YET
+
+ -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Sun, 08 Aug 2010 03:26:28 +0200
+
 b43-asm (0~20080619-0+c0.sidux.8) unstable; urgency=low
 
   * fix git:// upstream URL to the new address.
