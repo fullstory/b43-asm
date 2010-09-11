@@ -1,3 +1,9 @@
+b43-asm (0~20080619-0+c0.sidux.7) UNRELEASED; urgency=low
+
+  * NOT RELEASED YET
+
+ -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Thu, 22 Jul 2010 01:06:38 +0200
+
 b43-asm (0~20080619-0+c0.sidux.6) unstable; urgency=low
 
   * switch to dpkg-source 3.0 (quilt) format.
