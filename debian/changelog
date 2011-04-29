@@ -1,8 +1,9 @@
 b43-asm (0~20080619-0+c1.aptosid.10) UNRELEASED; urgency=low
 
   * NOT RELEASED YET
+  * bump standards version to 3.9.2, no changes necessary.
 
- -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Thu, 02 Sep 2010 13:35:46 +0200
+ -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Thu, 28 Apr 2011 15:50:58 +0200
 
 b43-asm (0~20080619-0+c1.aptosid.9) unstable; urgency=low
 
