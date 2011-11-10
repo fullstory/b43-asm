@@ -1,8 +1,8 @@
-b43-asm (0~20110912.1818-0+c0.aptosid.2) UNRELEASED; urgency=low
+b43-asm (0~20110912.1818-0+c0.aptosid.2) unstable; urgency=low
 
-  * NOT RELEASED YET
+  * update upstream eMail address in manpages.
 
- -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Thu, 10 Nov 2011 19:40:27 +0100
+ -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Thu, 10 Nov 2011 20:01:06 +0100
 
 b43-asm (0~20110912.1818-0+c0.aptosid.1) unstable; urgency=low
 
