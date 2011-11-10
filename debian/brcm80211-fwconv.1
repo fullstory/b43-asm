@@ -1,0 +1,60 @@
+.TH BRCM80211 "1" "November 2011" "Debian" "User Commands"
+.SH NAME
+BRCM80211 \- manual page for BRCM80211 firmware converter tool
+.SH SYNOPSIS
+.B brcm80211-fwconv
+[\fIOPTIONS\fR]
+.SH DESCRIPTION
+BRCM80211 firmware converter tool
+.TP
+\fB\-H\fR|\-\-header FILE
+Use FILE as header file
+.TP
+\fB\-B\fR|\-\-bin FILE
+Use FILE as bin file
+.SS "Actions:"
+.TP
+\fB\-d\fR|\-\-dump
+Dump general information
+.TP
+\fB\-x\fR|\-\-extract INDEX:FILE
+Extract the section with index INDEX to FILE
+.TP
+\fB\-m\fR|\-\-merge INDEX:FILE
+Merges FILE into the bin file stream at INDEX
+A Merge modifies the files specified in \fB\-H\fR and \fB\-B\fR
+.TP
+\fB\-h\fR|\-\-help
+Print this help text
+.PP
+Usage: /tmp/pkg/usr/bin/brcm80211\-fwconv [OPTIONS]
+.TP
+\fB\-H\fR|\-\-header FILE
+Use FILE as header file
+.TP
+\fB\-B\fR|\-\-bin FILE
+Use FILE as bin file
+.SS "Actions:"
+.TP
+\fB\-d\fR|\-\-dump
+Dump general information
+.TP
+\fB\-x\fR|\-\-extract INDEX:FILE
+Extract the section with index INDEX to FILE
+.TP
+\fB\-m\fR|\-\-merge INDEX:FILE
+Merges FILE into the bin file stream at INDEX
+A Merge modifies the files specified in \fB\-H\fR and \fB\-B\fR
+.TP
+\fB\-h\fR|\-\-help
+Print this help text
+.SH "SEE ALSO"
+.BR b43-asm
+.BR b43-dasm
+.BR b43-ivaldump
+.BR brcm80211-ivaldump
+.SH AUTHOR
+b43-asm has been written by Michael Buesch <mb@bu3sch.de>
+.PP
+This manual has been written by Stefan Lippers-Hollmann <s.l-h@gmx.de> for 
+the Debian project (but may be used by others).
