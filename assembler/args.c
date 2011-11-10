@@ -1,5 +1,5 @@
 /*
- *   Copyright (C) 2006-2007  Michael Buesch <mb@bu3sch.de>
+ *   Copyright (C) 2006-2010  Michael Buesch <m@bues.ch>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2
@@ -22,10 +22,12 @@
 #include <unistd.h>
 
 
-int _debug;
-bool arg_print_sizes;
-const char *initvals_fn_extension = ".initvals";
-const char *real_infile_name;
+struct cmdline_args cmdargs = {
+	.debug			= 0,
+	.print_sizes		= 0,
+	.initvals_fn_extension	= ".initvals",
+	.outformat		= FMT_B43,
+};
 
 
 #define ARG_MATCH		0
@@ -64,7 +66,7 @@ static int do_cmp_arg(char **argv, int *pos,
 		if (param) {
 			/* Skip the parameter on the next iteration. */
 			(*pos)++;
-			if (*param == 0) {
+			if (*param == NULL) {
 				fprintf(stderr, "%s needs a parameter\n", arg);
 				return ARG_ERROR;
 			}
@@ -94,20 +96,23 @@ static int cmp_arg(char **argv, int *pos,
 	return err;
 }
 
-static void usage(int argc, char **argv)
+static void usage(void)
 {
-	printf("Usage: %s INPUT_FILE OUTPUT_FILE [OPTIONS]\n", argv[0]);
-	printf("  -h|--help           Print this help\n");
+	printf("Usage: b43-asm INPUT_FILE OUTPUT_FILE [OPTIONS]\n");
+	printf("  -f|--format FMT     Output file format. FMT must be one of:\n");
+	printf("                      raw-le32, raw-be32, b43\n");
 	printf("  -d|--debug          Print verbose debugging info\n");
 	printf("                      Repeat for more verbose debugging\n");
 	printf("  -s|--psize          Print the size of the code after assembling\n");
 	printf("  -e|--ivalext EXT    Filename extension for the initvals\n");
+	printf("  -h|--help           Print this help\n");
 }
 
 int parse_args(int argc, char **argv)
 {
 	int i;
 	int res;
+	const char *param;
 
 	if (argc < 3)
 		goto out_usage;
@@ -115,32 +120,43 @@ int parse_args(int argc, char **argv)
 	outfile_name = argv[2];
 
 	for (i = 3; i < argc; i++) {
-		if ((res = cmp_arg(argv, &i, "--help", "-h", 0)) == ARG_MATCH) {
-			usage(argc, argv);
+		if ((res = cmp_arg(argv, &i, "--help", "-h", NULL)) == ARG_MATCH) {
+			usage();
 			return 1;
-		} else if ((res = cmp_arg(argv, &i, "--debug", "-d", 0)) == ARG_MATCH) {
-			_debug++;
-		} else if ((res = cmp_arg(argv, &i, "--psize", "-s", 0)) == ARG_MATCH) {
-			arg_print_sizes = 1;
-		} else if ((res = cmp_arg(argv, &i, "--ivalext", "-e", &initvals_fn_extension)) == ARG_MATCH) {
-			/* initvals_fn_extension is set to the extension. */
-		} else if ((res = cmp_arg(argv, &i, "--__real_infile", 0, &real_infile_name)) == ARG_MATCH) {
-			/* real_infile_name is set. */
+		} else if ((res = cmp_arg(argv, &i, "--format", "-f", &param)) == ARG_MATCH) {
+			if (strcasecmp(param, "raw-le32") == 0)
+				cmdargs.outformat = FMT_RAW_LE32;
+			else if (strcasecmp(param, "raw-be32") == 0)
+				cmdargs.outformat = FMT_RAW_BE32;
+			else if (strcasecmp(param, "b43") == 0)
+				cmdargs.outformat = FMT_B43;
+			else {
+				fprintf(stderr, "Invalid -f|--format\n\n");
+				goto out_usage;
+			}
+		} else if ((res = cmp_arg(argv, &i, "--debug", "-d", NULL)) == ARG_MATCH) {
+			cmdargs.debug++;
+		} else if ((res = cmp_arg(argv, &i, "--psize", "-s", NULL)) == ARG_MATCH) {
+			cmdargs.print_sizes = 1;
+		} else if ((res = cmp_arg(argv, &i, "--ivalext", "-e", &param)) == ARG_MATCH) {
+			cmdargs.initvals_fn_extension = param;
+		} else if ((res = cmp_arg(argv, &i, "--__real_infile", NULL, &param)) == ARG_MATCH) {
+			cmdargs.real_infile_name = param;
 		} else {
 			fprintf(stderr, "Unrecognized argument: %s\n", argv[i]);
 			goto out_usage;
 		}
 	}
-	if (!real_infile_name)
-		real_infile_name = infile_name;
-	if (strcmp(real_infile_name, outfile_name) == 0) {
+	if (!cmdargs.real_infile_name)
+		cmdargs.real_infile_name = infile_name;
+	if (strcmp(cmdargs.real_infile_name, outfile_name) == 0) {
 		fprintf(stderr, "Error: INPUT and OUTPUT filename must not be the same\n");
 		goto out_usage;
 	}
 
 	return 0;
 out_usage:
-	usage(argc, argv);
+	usage();
 	return -1;
 }
 

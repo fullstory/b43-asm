@@ -1,5 +1,5 @@
 /*
- *   Copyright (C) 2007  Michael Buesch <mb@bu3sch.de>
+ *   Copyright (C) 2007  Michael Buesch <m@bues.ch>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2
@@ -296,9 +296,9 @@ static void emit_ival_section(struct ivals_context *ctx)
 	hdr.ver = FW_HDR_VER;
 	hdr.size = cpu_to_be32(ctx->ivals_count);
 
-	fn_len = strlen(ctx->sect->name) + strlen(initvals_fn_extension ? : "") + 1;
+	fn_len = strlen(ctx->sect->name) + strlen(cmdargs.initvals_fn_extension ? : "") + 1;
 	fn = xmalloc(fn_len);
-	snprintf(fn, fn_len, "%s%s", ctx->sect->name, initvals_fn_extension ? : "");
+	snprintf(fn, fn_len, "%s%s", ctx->sect->name, cmdargs.initvals_fn_extension ? : "");
 	fd = fopen(fn, "w+");
 	if (!fd) {
 		fprintf(stderr, "Could not open initval output file \"%s\"\n", fn);
@@ -328,7 +328,7 @@ static void emit_ival_section(struct ivals_context *ctx)
 		filesize += size;
 	}
 
-	if (arg_print_sizes) {
+	if (cmdargs.print_sizes) {
 		printf("%s:  %d values (%u bytes)\n",
 		       fn, ctx->ivals_count, filesize);
 	}

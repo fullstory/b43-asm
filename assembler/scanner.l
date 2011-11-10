@@ -1,7 +1,7 @@
 %{
 
 /*
- *   Copyright (C) 2006-2007  Michael Buesch <mb@bu3sch.de>
+ *   Copyright (C) 2006-2010  Michael Buesch <m@bues.ch>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2
@@ -15,11 +15,10 @@
 
 #include "parser.h"
 #include "main.h"
+#include "util.h"
 
 #include <stdio.h>
-
-#undef min
-#define min(x,y)	((x) < (y) ? (x) : (y))
+#include <ctype.h>
 
 
 static void interpret_cppinfo(const char *);
@@ -30,7 +29,7 @@ static inline void log_current_line(void)
 	size_t len;
 
 	len = min(sizeof(cur_lineinfo.linecopy) - 1, strlen(yytext));
-	strncpy(cur_lineinfo.linecopy, yytext, len);
+	memcpy(cur_lineinfo.linecopy, yytext, len);
 	cur_lineinfo.linecopy[len] = '\0';
 }
 
@@ -43,7 +42,7 @@ NEWLINE		((\r)|(\n)|(\r\n))
 %%
 
 ^.*$					{ log_current_line(); REJECT; }
-#\ [0-9]+\ \".*\"[ ]*[0-9]*{NEWLINE}	{ interpret_cppinfo(yytext); }
+#{WS}+[0-9]+{WS}+\".*\"[0-9 \t]*{NEWLINE}	{ interpret_cppinfo(yytext); }
 
 
 {WS}+			{ update_lineinfo(); /* whitespace */ }
@@ -56,7 +55,7 @@ NEWLINE		((\r)|(\n)|(\r\n))
 ^{WS}*\.text{WS}*$			{ update_lineinfo(); return SECTION_TEXT; }
 ^{WS}*\.initvals/\({IDENTIFIER}\)	{ update_lineinfo(); return SECTION_IVALS; }
 
-spr[0-9a-fA-F]{3,3}	{ update_lineinfo(); return SPR; }
+spr[0-9a-fA-F]{1,4}	{ update_lineinfo(); return SPR; }
 r/([0-9]|([1-5][0-9])|(6[0-3]))	{ update_lineinfo(); return GPR; }
 off/[0-6]		{ update_lineinfo(); return OFFR; }
 lr/[0-3]		{ update_lineinfo(); return LR; }
@@ -82,6 +81,8 @@ lr/[0-3]		{ update_lineinfo(); return LR; }
 \~			{ update_lineinfo(); return BITW_NOT; }
 \<\<			{ update_lineinfo(); return LEFTSHIFT; }
 \>\>			{ update_lineinfo(); return RIGHTSHIFT; }
+
+mul			{ update_lineinfo(); return OP_MUL; }
 
 add			{ update_lineinfo(); return OP_ADD; }
 add\.			{ update_lineinfo(); return OP_ADDSC; }
@@ -121,13 +122,19 @@ jl			{ update_lineinfo(); return OP_JL; }
 jge			{ update_lineinfo(); return OP_JGE; }
 jg			{ update_lineinfo(); return OP_JG; }
 jle			{ update_lineinfo(); return OP_JLE; }
+jdn			{ update_lineinfo(); return OP_JDN; }
+jdpz			{ update_lineinfo(); return OP_JDPZ; }
+jdp			{ update_lineinfo(); return OP_JDP; }
+jdnz			{ update_lineinfo(); return OP_JDNZ; }
 jzx			{ update_lineinfo(); return OP_JZX; }
 jnzx			{ update_lineinfo(); return OP_JNZX; }
 jext			{ update_lineinfo(); return OP_JEXT; }
 jnext			{ update_lineinfo(); return OP_JNEXT; }
 
 call			{ update_lineinfo(); return OP_CALL; }
+calls			{ update_lineinfo(); return OP_CALLS; }
 ret			{ update_lineinfo(); return OP_RET; }
+rets			{ update_lineinfo(); return OP_RETS; }
 
 tkiph			{ update_lineinfo(); return OP_TKIPH; }
 tkiphs			{ update_lineinfo(); return OP_TKIPHS; }
@@ -144,7 +151,7 @@ shm16			{ update_lineinfo(); return IVAL_SHM16; }
 shm32			{ update_lineinfo(); return IVAL_SHM32; }
 tram			{ update_lineinfo(); return IVAL_TRAM; }
 
-@[0-9a-fA-F]{3,3}	{ update_lineinfo(); return RAW_CODE; }
+@[0-9a-fA-F]{1,4}	{ update_lineinfo(); return RAW_CODE; }
 
 0x[0-9a-fA-F]+		{ update_lineinfo(); return HEXNUM; }
 -?[0-9]+		{ update_lineinfo(); return DECNUM; }
@@ -155,36 +162,44 @@ tram			{ update_lineinfo(); return IVAL_TRAM; }
 %%
 
 struct lineinfo cur_lineinfo;
-//FIXME The linenumber sometimes is wrong.
+
+static inline const char * strip_leading_ws(const char *str)
+{
+	while (*str != '\0' && isspace(*str))
+		str++;
+	return str;
+}
 
 static void interpret_cppinfo(const char *str)
 {
 	const char * const orig = str;
 	char tmp[64];
-	char *found;
+	const char *found;
+	char *tail;
 
 	/* This will interpret lines added by CPP.
 	 * They look like:
-	 *     # 3 "file.asm" 1
+	 *     # lineno "filename" flags...
 	 */
 
-	if (*str == '\0')
+	str = strip_leading_ws(str);
+	if (*str != '#')
 		goto error;
 	str++; /* skip # character */
+	str = strip_leading_ws(str);
 	if (*str == '\0')
 		goto error;
-	str++; /* skip whitespace */
 
 	/* Line number */
 	found = strchr(str, ' ');
 	if (!found)
 		goto error;
 	memset(tmp, 0, sizeof(tmp));
-	memcpy(tmp, str, min(sizeof(tmp) - 1,
-			     (int)(found - str)));
-	cur_lineinfo.lineno = strtoul(tmp, NULL, 10) - 1;
-	str = found;
-	str++;
+	memcpy(tmp, str, min(sizeof(tmp) - 1, (size_t)(found - str)));
+	cur_lineinfo.lineno = strtoul(tmp, &tail, 0);
+	if (*tail != '\0')
+		goto error;
+	str = strip_leading_ws(found);
 
 	/* File name */
 	if (*str != '\"')
@@ -196,9 +211,10 @@ static void interpret_cppinfo(const char *str)
 	if (!found)
 		goto error;
 	memset(cur_lineinfo.file, 0, sizeof(cur_lineinfo.file));
-	memcpy(cur_lineinfo.file, str,
-	       min(sizeof(cur_lineinfo.file) - 1,
-		   (int)(found - str)));
+	memcpy(cur_lineinfo.file, str, min(sizeof(cur_lineinfo.file) - 1,
+					   (size_t)(found - str)));
+
+	/* We ignore the flags. */
 
 	return;
 error:
