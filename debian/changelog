@@ -8,6 +8,8 @@ b43-asm (0~20110912.1818-0+c0.aptosid.1) unstable; urgency=low
     - I: b43-asm: spelling-error-in-manpage b43-dasm.1 allows to allows one to
     - W: b43-asm: manpage-has-useless-whatis-entry brcm80211-fwconv.1
     - W: b43-asm: manpage-has-useless-whatis-entry brcm80211-ivaldump.1
+    - W: b43-asm source: debian-rules-missing-recommended-target build-arch
+    - W: b43-asm source: debian-rules-missing-recommended-target build-indep
   * override non-fixable lintian warnings:
     - b43-asm source: debian-watch-file-is-missing
     - b43-asm: no-upstream-changelog
@@ -16,7 +18,7 @@ b43-asm (0~20110912.1818-0+c0.aptosid.1) unstable; urgency=low
   * update git URI to use git://git.bues.ch/b43-tools.git.
   * add initial help2man based manpages for brcm80211-{ivaldump,fwconv}.
 
- -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Thu, 10 Nov 2011 19:24:45 +0100
+ -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Thu, 10 Nov 2011 19:38:46 +0100
 
 b43-asm (0~20080619-0+c1.aptosid.9) unstable; urgency=low
 
