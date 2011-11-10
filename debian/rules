@@ -3,9 +3,8 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
-build: build-stamp
-
-build-stamp:
+build-arch: build-arch-stamp
+build-arch-stamp:
 	dh_testdir
 	
 	@echo "CFLAGS=$(CFLAGS)"
@@ -14,10 +13,19 @@ build-stamp:
 	
 	touch $@
 
+build-indep: build-indep-stamp
+build-indep-stamp:
+	dh_testdir
+	touch $@
+
+build: build-arch build-indep
+
 clean:
 	dh_testdir
 	dh_testroot
-	rm -f build-stamp selftest test.fw
+	rm -rf	b43-tools \
+		build-stamp \
+		selftest test.fw
 	
 	$(MAKE) -C assembler distclean
 	$(MAKE) -C disassembler distclean
@@ -33,9 +41,9 @@ install: build selftest
 	$(MAKE) -C assembler PREFIX=$(CURDIR)/debian/b43-asm/usr install
 	$(MAKE) -C disassembler PREFIX=$(CURDIR)/debian/b43-asm/usr install
 
-binary-indep: install
+binary-indep: build install
 
-binary-arch: install
+binary-arch: build install
 	dh_testdir
 	dh_testroot
 	dh_installchangelogs
@@ -43,6 +51,7 @@ binary-arch: install
 	dh_installexamples
 	#dh_install
 	dh_installman
+	dh_lintian
 	dh_link
 	dh_strip
 	dh_compress
@@ -53,20 +62,20 @@ binary-arch: install
 	dh_md5sums
 	dh_builddeb
 
+binary: binary-indep binary-arch
+
 selftest:
 	PATH=$(CURDIR)/assembler:$(PATH) b43-asm assembler/test.asm test.fw --cpp-args -DDEBUG=1 -- --ivalext .fw --psize
 	PATH=$(CURDIR)/assembler:$(CURDIR)/disassembler:$(PATH) $(CURDIR)/assembler/selftest.sh test.fw
 	
 	touch $@
 
-binary: binary-indep binary-arch
-
 get-orig-source:
 	@rm -rf b43-tools
-	git clone git://git.bu3sch.de/b43-tools.git
+	git clone git://git.bues.ch/b43-tools.git
 	@test -d b43-tools
 	GIT_DATE=$$(GIT_DIR=b43-tools/.git/ git log -1 --pretty=format:%cD assembler/ disassembler/); \
-		UTC_DATE=$$(date --utc --date="Mon, 12 Sep 2011 20:18:18 +0200" +%Y%m%d.%H%M); \
+		UTC_DATE=$$(date --utc --date="$$GIT_DATE" +%Y%m%d.%H%M); \
 		mkdir b43-tools/b43-asm-0~$$UTC_DATE; \
 		test -d b43-tools/b43-asm-0~$$UTC_DATE; \
 		cp -r	b43-tools/assembler \
