@@ -66,7 +66,7 @@ get-orig-source:
 	git clone git://git.bues.ch/b43-tools.git
 	@test -d b43-tools
 	GIT_DATE=$$(GIT_DIR=b43-tools/.git/ git log -1 --pretty=format:%cD assembler/ disassembler/); \
-		UTC_DATE=$$(date --utc --date="Mon, 12 Sep 2011 20:18:18 +0200" +%Y%m%d.%H%M); \
+		UTC_DATE=$$(date --utc --date="$$GIT_DATE" +%Y%m%d.%H%M); \
 		mkdir b43-tools/b43-asm-0~$$UTC_DATE; \
 		test -d b43-tools/b43-asm-0~$$UTC_DATE; \
 		cp -r	b43-tools/assembler \
