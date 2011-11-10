@@ -6,8 +6,9 @@ b43-asm (0~20080619-0+c1.aptosid.10) UNRELEASED; urgency=low
     to use alioth's new anonscm location.
   * make lintian happier:
     - I: b43-asm: spelling-error-in-manpage b43-dasm.1 allows to allows one to
+  * add crude get-orig-source target.
 
- -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Thu, 10 Nov 2011 14:34:35 +0100
+ -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Thu, 10 Nov 2011 16:36:56 +0100
 
 b43-asm (0~20080619-0+c1.aptosid.9) unstable; urgency=low
 
