@@ -1,5 +1,5 @@
 /*
- *   Copyright (C) 2006-2007  Michael Buesch <mb@bu3sch.de>
+ *   Copyright (C) 2006-2010  Michael Buesch <m@bues.ch>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2
@@ -117,6 +117,7 @@ static void eval_directives(struct assembler_context *ctx)
 	struct label *l;
 	int have_start_label = 0;
 	int have_arch = 0;
+	unsigned int arch_fallback = 0;
 
 	for_each_statement(ctx, s) {
 		if (s->type == STMT_ASMDIR) {
@@ -126,6 +127,17 @@ static void eval_directives(struct assembler_context *ctx)
 				if (have_arch)
 					asm_error(ctx, "Multiple %%arch definitions");
 				ctx->arch = ad->u.arch;
+				if (ctx->arch > 5 && ctx->arch < 15)
+					arch_fallback = 5;
+				if (ctx->arch > 15)
+					arch_fallback = 15;
+				if (arch_fallback) {
+					asm_warn(ctx, "Using %%arch %d is incorrect. "
+						 "The wireless core revision %d uses the "
+						 "firmware architecture %d. So use %%arch %d",
+						 ctx->arch, ctx->arch, arch_fallback, arch_fallback);
+					ctx->arch = arch_fallback;
+				}
 				if (ctx->arch != 5 && ctx->arch != 15) {
 					asm_error(ctx, "Architecture version %u unsupported",
 						  ctx->arch);
@@ -169,6 +181,17 @@ static bool is_possible_imm(unsigned int imm)
 	return 1;
 }
 
+static unsigned int immediate_nr_bits(struct assembler_context *ctx)
+{
+	switch (ctx->arch) {
+	case 5:
+		return 10; /* 10 bits */
+	case 15:
+		return 11; /* 11 bits */
+	}
+	asm_error(ctx, "Internal error: immediate_nr_bits unknown arch\n");
+}
+
 static bool is_valid_imm(struct assembler_context *ctx,
 			 unsigned int imm)
 {
@@ -189,14 +212,7 @@ static bool is_valid_imm(struct assembler_context *ctx,
 		return 0;
 	imm &= 0xFFFF;
 
-	if (ctx->arch == 5) {
-		immediate_size = 10; /* 10bit */
-	} else if (ctx->arch == 15) {
-		immediate_size = 11; /* 11bit */
-	} else {
-		asm_error(ctx, "Unknown immediate size for arch %u",
-			  ctx->arch);
-	}
+	immediate_size = immediate_nr_bits(ctx);
 
 	/* First create a mask with all possible bits for
 	 * an immediate value unset. */
@@ -253,8 +269,6 @@ static unsigned int generate_imm_operand(struct assembler_context *ctx,
 	unsigned int val, tmp;
 	unsigned int mask;
 
-	/* format: 0b11ii iiii iiii */
-
 	val = 0xC00;
 	if (ctx->arch == 15)
 		val <<= 1;
@@ -262,9 +276,9 @@ static unsigned int generate_imm_operand(struct assembler_context *ctx,
 
 	if (!is_valid_imm(ctx, tmp)) {
 		asm_warn(ctx, "IMMEDIATE 0x%X (%d) too long "
-			      "(> 9 bits + sign). Did you intend to "
+			      "(> %u bits + sign). Did you intend to "
 			      "use implicit sign extension?",
-			 tmp, (int)tmp);
+			 tmp, (int)tmp, immediate_nr_bits(ctx) - 1);
 	}
 
 	if (ctx->arch == 15)
@@ -283,16 +297,14 @@ static unsigned int generate_reg_operand(struct assembler_context *ctx,
 
 	switch (reg->type) {
 	case GPR:
-		/* format: 0b1011 11rr rrrr */
 		val |= 0xBC0;
 		if (ctx->arch == 15)
 			val <<= 1;
-		if (reg->nr & ~0x3F) //FIXME 128 regs for v15 arch possible?
+		if (reg->nr & ~0x3F) /* REVISIT: 128 regs for v15 arch possible? Probably not... */
 			asm_error(ctx, "GPR-nr too big");
 		val |= reg->nr;
 		break;
 	case SPR:
-		/* format: 0b100. .... .... */
 		val |= 0x800;
 		if (ctx->arch == 15)
 			val <<= 1;
@@ -301,7 +313,6 @@ static unsigned int generate_reg_operand(struct assembler_context *ctx,
 		val |= reg->nr;
 		break;
 	case OFFR:
-		/* format: 0b1000 0110 0rrr */
 		val |= 0x860;
 		if (ctx->arch == 15)
 			val <<= 1;
@@ -319,27 +330,51 @@ static unsigned int generate_reg_operand(struct assembler_context *ctx,
 static unsigned int generate_mem_operand(struct assembler_context *ctx,
 					 const struct memory *mem)
 {
-	unsigned int val = 0, off, reg;
+	unsigned int val = 0, off, reg, off_mask, reg_shift;
 
 	switch (mem->type) {
 	case MEM_DIRECT:
-		/* format: 0b0mmm mmmm mmmm */
 		off = mem->offset;
-		if (off & ~0x7FF) { //FIXME 4096 words for v15 arch possible?
-			asm_warn(ctx, "DIRECT memoffset 0x%X too long (> 11 bits)", off);
-			off &= 0x7FF;
+		switch (ctx->arch) {
+		case 5:
+			if (off & ~0x7FF) {
+				asm_warn(ctx, "DIRECT memoffset 0x%X too long (> 11 bits)", off);
+				off &= 0x7FF;
+			}
+			break;
+		case 15:
+			if (off & ~0xFFF) {
+				asm_warn(ctx, "DIRECT memoffset 0x%X too long (> 12 bits)", off);
+				off &= 0xFFF;
+			}
+			break;
+		default:
+			asm_error(ctx, "Internal error: generate_mem_operand invalid arch");
 		}
 		val |= off;
 		break;
 	case MEM_INDIRECT:
-		/* format: 0b101r rroo oooo */
+		switch (ctx->arch) {
+		case 5:
+			val = 0xA00;
+			off_mask = 0x3F;
+			reg_shift = 6;
+			break;
+		case 15:
+			val = 0x1400;
+			off_mask = 0x7F;
+			reg_shift = 7;
+			break;
+		default:
+			asm_error(ctx, "Internal error: MEM_INDIRECT invalid arch\n");
+		}
+
 		off = mem->offset;
 		reg = mem->offr_nr;
-		val |= 0xA00;
-		//FIXME what about v15 arch?
-		if (off & ~0x3F) {
-			asm_warn(ctx, "INDIRECT memoffset 0x%X too long (> 6 bits)", off);
-			off &= 0x3F;
+		if (off & ~off_mask) {
+			asm_warn(ctx, "INDIRECT memoffset 0x%X too long (> %u bits)",
+				 off, reg_shift);
+			off &= off_mask;
 		}
 		if (reg > 6) {
 			/* Assembler bug. The parser shouldn't pass this value. */
@@ -350,7 +385,7 @@ static unsigned int generate_mem_operand(struct assembler_context *ctx,
 				 "on certain devices. Use off0 to off5 only.");
 		}
 		val |= off;
-		val |= (reg << 6);
+		val |= (reg << reg_shift);
 		break;
 	default:
 		asm_error(ctx, "generate_mem_operand() memtype");
@@ -394,7 +429,7 @@ static struct code_output * do_assemble_insn(struct assembler_context *ctx,
 					     struct instruction *insn,
 					     unsigned int opcode)
 {
-	int i;
+	unsigned int i;
 	struct operlist *ol;
 	int nr_oper = 0;
 	uint64_t code = 0;
@@ -445,6 +480,27 @@ static struct code_output * do_assemble_insn(struct assembler_context *ctx,
 	list_add_tail(&out->list, &ctx->output);
 
 	return out;
+}
+
+static void do_assemble_ret(struct assembler_context *ctx,
+			    struct instruction *insn,
+			    unsigned int opcode)
+{
+	struct code_output *out;
+
+	/* Get the previous instruction and check whether it
+	 * is a jump instruction. */
+	list_for_each_entry_reverse(out, &ctx->output, list) {
+		/* Search the last insn. */
+		if (out->type == OUT_INSN) {
+			if (out->is_jump_insn) {
+				asm_warn(ctx, "RET instruction directly after "
+					 "jump instruction. The hardware won't like this.");
+			}
+			break;
+		}
+	}
+	do_assemble_insn(ctx, insn, opcode);
 }
 
 static unsigned int merge_ext_into_opcode(struct assembler_context *ctx,
@@ -681,6 +737,9 @@ static void assemble_instruction(struct assembler_context *ctx,
 	unsigned int opcode;
 
 	switch (insn->op) {
+	case OP_MUL:
+		do_assemble_insn(ctx, insn, 0x101);
+		break;
 	case OP_ADD:
 		do_assemble_insn(ctx, insn, 0x1C0);
 		break;
@@ -799,6 +858,22 @@ static void assemble_instruction(struct assembler_context *ctx,
 		out = do_assemble_insn(ctx, insn, 0x0DC | 0x1);
 		out->is_jump_insn = 1;
 		break;
+	case OP_JDN:
+		out = do_assemble_insn(ctx, insn, 0x0D6);
+		out->is_jump_insn = 1;
+		break;
+	case OP_JDPZ:
+		out = do_assemble_insn(ctx, insn, 0x0D6 | 0x1);
+		out->is_jump_insn = 1;
+		break;
+	case OP_JDP:
+		out = do_assemble_insn(ctx, insn, 0x0D8);
+		out->is_jump_insn = 1;
+		break;
+	case OP_JDNZ:
+		out = do_assemble_insn(ctx, insn, 0x0D8 | 0x1);
+		out->is_jump_insn = 1;
+		break;
 	case OP_JZX:
 		opcode = merge_ext_into_opcode(ctx, 0x400, insn);
 		out = do_assemble_insn(ctx, insn, opcode);
@@ -820,22 +895,24 @@ static void assemble_instruction(struct assembler_context *ctx,
 		out->is_jump_insn = 1;
 		break;
 	case OP_CALL:
+		if (ctx->arch != 5)
+			asm_error(ctx, "'call' instruction is only supported on arch 5");
 		do_assemble_insn(ctx, insn, 0x002);
 		break;
+	case OP_CALLS:
+		if (ctx->arch != 15)
+			asm_error(ctx, "'calls' instruction is only supported on arch 15");
+		do_assemble_insn(ctx, insn, 0x004);
+		break;
 	case OP_RET:
-		/* Get the previous instruction and check whether it
-		 * is a jump instruction. */
-		list_for_each_entry_reverse(out, &ctx->output, list) {
-			/* Search the last insn. */
-			if (out->type == OUT_INSN) {
-				if (out->is_jump_insn) {
-					asm_warn(ctx, "RET instruction directly after "
-						 "jump instruction. The hardware won't like this.");
-				}
-				break;
-			}
-		}
-		do_assemble_insn(ctx, insn, 0x003);
+		if (ctx->arch != 5)
+			asm_error(ctx, "'ret' instruction is only supported on arch 5");
+		do_assemble_ret(ctx, insn, 0x003);
+		break;
+	case OP_RETS:
+		if (ctx->arch != 15)
+			asm_error(ctx, "'rets' instruction is only supported on arch 15");
+		do_assemble_insn(ctx, insn, 0x005);
 		break;
 	case OP_TKIPH:
 	case OP_TKIPHS:
@@ -959,7 +1036,7 @@ static void resolve_labels(struct assembler_context *ctx)
 {
 	struct code_output *c;
 	int addr;
-	int i;
+	unsigned int i;
 	unsigned int current_address;
 
 	/* Calculate the absolute addresses for each instruction. */
@@ -1036,7 +1113,7 @@ static void emit_code(struct assembler_context *ctx)
 	struct code_output *c;
 	uint64_t code;
 	unsigned char outbuf[8];
-	unsigned int insn_count = 0;
+	unsigned int insn_count = 0, insn_count_limit;
 	struct fw_header hdr;
 
 	fn = outfile_name;
@@ -1046,7 +1123,7 @@ static void emit_code(struct assembler_context *ctx)
 		exit(1);
 	}
 	if (IS_VERBOSE_DEBUG)
-		fprintf(stderr, "\nCode:\n");
+		printf("\nCode:\n");
 
 	list_for_each_entry(c, &ctx->output, list) {
 		switch (c->type) {
@@ -1058,65 +1135,94 @@ static void emit_code(struct assembler_context *ctx)
 		}
 	}
 
-	memset(&hdr, 0, sizeof(hdr));
-	hdr.type = FW_TYPE_UCODE;
-	hdr.ver = FW_HDR_VER;
-	hdr.size = cpu_to_be32(8 * insn_count);
-	if (fwrite(&hdr, sizeof(hdr), 1, fd) != 1) {
-		fprintf(stderr, "Could not write microcode outfile\n");
-		exit(1);
+	switch (cmdargs.outformat) {
+	case FMT_RAW_LE32:
+	case FMT_RAW_BE32:
+		/* Nothing */
+		break;
+	case FMT_B43:
+		memset(&hdr, 0, sizeof(hdr));
+		hdr.type = FW_TYPE_UCODE;
+		hdr.ver = FW_HDR_VER;
+		hdr.size = cpu_to_be32(8 * insn_count);
+		if (fwrite(&hdr, sizeof(hdr), 1, fd) != 1) {
+			fprintf(stderr, "Could not write microcode outfile\n");
+			exit(1);
+		}
+		break;
 	}
 
-	if (insn_count > NUM_INSN_LIMIT)
-		asm_warn(ctx, "Generating more than %d instructions. This "
+	switch (ctx->arch) {
+	case 5:
+		insn_count_limit = NUM_INSN_LIMIT_R5;
+		break;
+	case 15:
+		insn_count_limit = ~0; //FIXME limit currently unknown.
+		break;
+	default:
+		asm_error(ctx, "Internal error: emit_code unknown arch\n");
+	}
+	if (insn_count > insn_count_limit)
+		asm_warn(ctx, "Generating more than %u instructions. This "
 			      "will overflow the device microcode memory.",
-			 NUM_INSN_LIMIT);
+			 insn_count_limit);
 
 	list_for_each_entry(c, &ctx->output, list) {
 		switch (c->type) {
 		case OUT_INSN:
 			if (IS_VERBOSE_DEBUG) {
-				fprintf(stderr, "%03X %03X,%03X,%03X\n",
+				printf("%03X %04X,%04X,%04X\n",
 					c->opcode,
 					c->operands[0].u.operand,
 					c->operands[1].u.operand,
 					c->operands[2].u.operand);
 			}
-			code = 0;
 
-			if (ctx->arch == 5) {
-				/* Instruction binary format is: xxyyyzzz0000oooX
-				 *                        byte-0-^       byte-7-^
-				 * ooo is the opcode
-				 * Xxx is the first operand
-				 * yyy is the second operand
-				 * zzz is the third operand
-				 */
+			switch (ctx->arch) {
+			case 5:
+				code = 0;
 				code |= ((uint64_t)c->operands[2].u.operand);
 				code |= ((uint64_t)c->operands[1].u.operand) << 12;
 				code |= ((uint64_t)c->operands[0].u.operand) << 24;
 				code |= ((uint64_t)c->opcode) << 36;
-				code = ((code & (uint64_t)0xFFFFFFFF00000000ULL) >> 32) |
-				       ((code & (uint64_t)0x00000000FFFFFFFFULL) << 32);
-			} else if (ctx->arch == 15) {
+				break;
+			case 15:
+				code = 0;
 				code |= ((uint64_t)c->operands[2].u.operand);
 				code |= ((uint64_t)c->operands[1].u.operand) << 13;
 				code |= ((uint64_t)c->operands[0].u.operand) << 26;
 				code |= ((uint64_t)c->opcode) << 39;
-				code = ((code & (uint64_t)0xFFFFFFFF00000000ULL) >> 32) |
-				       ((code & (uint64_t)0x00000000FFFFFFFFULL) << 32);
-			} else {
+				break;
+			default:
 				asm_error(ctx, "No emit format for arch %u",
 					  ctx->arch);
 			}
-			outbuf[0] = (code & (uint64_t)0xFF00000000000000ULL) >> 56;
-			outbuf[1] = (code & (uint64_t)0x00FF000000000000ULL) >> 48;
-			outbuf[2] = (code & (uint64_t)0x0000FF0000000000ULL) >> 40;
-			outbuf[3] = (code & (uint64_t)0x000000FF00000000ULL) >> 32;
-			outbuf[4] = (code & (uint64_t)0x00000000FF000000ULL) >> 24;
-			outbuf[5] = (code & (uint64_t)0x0000000000FF0000ULL) >> 16;
-			outbuf[6] = (code & (uint64_t)0x000000000000FF00ULL) >> 8;
-			outbuf[7] = (code & (uint64_t)0x00000000000000FFULL) >> 0;
+
+			switch (cmdargs.outformat) {
+			case FMT_B43:
+			case FMT_RAW_BE32:
+				code = ((code & (uint64_t)0xFFFFFFFF00000000ULL) >> 32) |
+				       ((code & (uint64_t)0x00000000FFFFFFFFULL) << 32);
+				outbuf[0] = (code & (uint64_t)0xFF00000000000000ULL) >> 56;
+				outbuf[1] = (code & (uint64_t)0x00FF000000000000ULL) >> 48;
+				outbuf[2] = (code & (uint64_t)0x0000FF0000000000ULL) >> 40;
+				outbuf[3] = (code & (uint64_t)0x000000FF00000000ULL) >> 32;
+				outbuf[4] = (code & (uint64_t)0x00000000FF000000ULL) >> 24;
+				outbuf[5] = (code & (uint64_t)0x0000000000FF0000ULL) >> 16;
+				outbuf[6] = (code & (uint64_t)0x000000000000FF00ULL) >> 8;
+				outbuf[7] = (code & (uint64_t)0x00000000000000FFULL) >> 0;
+				break;
+			case FMT_RAW_LE32:
+				outbuf[7] = (code & (uint64_t)0xFF00000000000000ULL) >> 56;
+				outbuf[6] = (code & (uint64_t)0x00FF000000000000ULL) >> 48;
+				outbuf[5] = (code & (uint64_t)0x0000FF0000000000ULL) >> 40;
+				outbuf[4] = (code & (uint64_t)0x000000FF00000000ULL) >> 32;
+				outbuf[3] = (code & (uint64_t)0x00000000FF000000ULL) >> 24;
+				outbuf[2] = (code & (uint64_t)0x0000000000FF0000ULL) >> 16;
+				outbuf[1] = (code & (uint64_t)0x000000000000FF00ULL) >> 8;
+				outbuf[0] = (code & (uint64_t)0x00000000000000FFULL) >> 0;
+				break;
+			}
 
 			if (fwrite(&outbuf, ARRAY_SIZE(outbuf), 1, fd) != 1) {
 				fprintf(stderr, "Could not write microcode outfile\n");
@@ -1128,7 +1234,7 @@ static void emit_code(struct assembler_context *ctx)
 		}
 	}
 
-	if (arg_print_sizes) {
+	if (cmdargs.print_sizes) {
 		printf("%s:  text = %u instructions (%u bytes)\n",
 		       fn, insn_count,
 		       (unsigned int)(insn_count * sizeof(uint64_t)));
