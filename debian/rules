@@ -43,6 +43,7 @@ binary-arch: install
 	dh_installexamples
 	#dh_install
 	dh_installman
+	dh_lintian
 	dh_link
 	dh_strip
 	dh_compress
