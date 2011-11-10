@@ -1,7 +1,7 @@
 Format: http://anonscm.debian.org/viewvc/dep/web/deps/dep5.mdwn?revision=174&view=co
 Upstream-Name: b43-tools/assembler, b43-tools/disassembler
 Upstream-Contact: Michael Buesch <m@bues.ch>
-Source: git://git.bu3sch.de/b43-tools.git
+Source: git://git.bues.ch/b43-tools.git
 
 Files: *
 Copyright: 2006-2011, Michael Buesch <m@bues.ch>

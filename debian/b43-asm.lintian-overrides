@@ -1,0 +1,10 @@
+# there are neither upstream releases nor tarballs to download, the only
+# download location for b43-tools is git://git.bues.ch/b43-tools.git
+b43-asm source: debian-watch-file-is-missing
+b43-asm: no-upstream-changelog
+
+# there is nothing which could be considered an upstream homepage, what comes
+# closest are:
+# - http://wireless.kernel.org/en/users/Drivers/b43
+# - http://bcm-v4.sipsolutions.net/
+b43-asm: no-homepage-field

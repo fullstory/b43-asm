@@ -1,3 +1,5 @@
 debian/b43-asm.1
 debian/b43-ivaldump.1
 debian/b43-dasm.1
+debian/brcm80211-fwconv.1
+debian/brcm80211-ivaldump.1
