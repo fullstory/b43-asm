@@ -1,8 +1,8 @@
-b43-asm (0~20110912.1818-0+c0.aptosid.3) UNRELEASED; urgency=low
+b43-asm (0~20110912.1818-0+c0.aptosid.3) unstable; urgency=low
 
-  * NOT RELEASED YET
+  * switch to compat level 9.
 
- -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Thu, 10 Nov 2011 20:01:18 +0100
+ -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Mon, 16 Jan 2012 00:31:04 +0100
 
 b43-asm (0~20110912.1818-0+c0.aptosid.2) unstable; urgency=low
 
