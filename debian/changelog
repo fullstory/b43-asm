@@ -1,8 +1,8 @@
-b43-asm (0~20110912.1818-0+c0.aptosid.5) UNRELEASED; urgency=low
+b43-asm (0~20110912.1818-0+c0.aptosid.5) unstable; urgency=low
 
-  * NOT RELEASED YET
+  * update dep-5 version to final 1.0, no changes necessary.
 
- -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Thu, 23 Feb 2012 15:44:48 +0100
+ -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Mon, 27 Feb 2012 23:00:34 +0100
 
 b43-asm (0~20110912.1818-0+c0.aptosid.4) unstable; urgency=low
 
