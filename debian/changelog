@@ -1,8 +1,8 @@
-b43-asm (0~20110912.1818-0+c0.aptosid.6) UNRELEASED; urgency=low
+b43-asm (0~20110912.1818-0+c0.aptosid.6) unstable; urgency=low
 
-  * NOT RELEASED YET
+  * rebuild with gcc-4.7.
 
- -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Mon, 27 Feb 2012 23:01:03 +0100
+ -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Tue, 08 May 2012 00:12:05 +0200
 
 b43-asm (0~20110912.1818-0+c0.aptosid.5) unstable; urgency=low
 
