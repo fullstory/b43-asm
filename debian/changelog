@@ -1,3 +1,13 @@
+b43-asm (0~20110912.1818-0+c0.aptosid.8) unstable; urgency=low
+
+  * make lintian a little happier:
+    - W: b43-asm: hardening-no-fortify-functions usr/bin/b43-asm.bin
+    - W: b43-asm: hardening-no-fortify-functions usr/bin/b43-dasm
+    - W: b43-asm: hardening-no-relro usr/bin/b43-asm.bin
+    - W: b43-asm: hardening-no-relro usr/bin/b43-dasm
+
+ -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Sat, 12 Jan 2013 01:13:08 +0100
+
 b43-asm (0~20110912.1818-0+c0.aptosid.7) unstable; urgency=low
 
   * bump standards version to 3.9.4, no changes necessary.
