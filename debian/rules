@@ -1,80 +1,49 @@
 #!/usr/bin/make -f
 
-# Uncomment this to turn on verbose mode.
-#export DH_VERBOSE=1
+# The build system doesn't use CPPFLAGS, pass them to CFLAGS to enable the
+# missing (hardening) flags
+DEB_CFLAGS_MAINT_APPEND  = $(shell dpkg-buildflags --get CPPFLAGS)
+export DEB_CFLAGS_MAINT_APPEND
 
-export DEB_BUILD_MAINT_OPTIONS = hardening=+all
-DPKG_EXPORT_BUILDFLAGS = 1
-include /usr/share/dpkg/buildflags.mk
+PREFIX=$(CURDIR)/debian/b43-asm/usr
+export PREFIX
 
-CFLAGS += $(CPPFLAGS)
+override_dh_auto_build:
+	dh_auto_build --sourcedirectory=assembler \
+		      --buildsystem=makefile \
+		      --parallel
+	dh_auto_build --sourcedirectory=disassembler \
+		      --buildsystem=makefile \
+		      --parallel
 
-build-arch: build-arch-stamp
-build-arch-stamp:
-	dh_testdir
-	
-	@echo "CFLAGS=$(CFLAGS)"
-	$(MAKE) -C assembler CFLAGS="$(CFLAGS) -fomit-frame-pointer -std=c99 -Wall -D_BSD_SOURCE -D_GNU_SOURCE -DYYSTYPE='void *' -DYYERROR_VERBOSE -DYYDEBUG -Wno-unused"
-	$(MAKE) -C disassembler CFLAGS="$(CFLAGS) -fomit-frame-pointer -std=gnu99 -Wall -D_BSD_SOURCE -D_GNU_SOURCE"
-	
-	touch $@
-
-build-indep: build-indep-stamp
-build-indep-stamp:
-	dh_testdir
-	touch $@
-
-build: build-arch build-indep
-
-clean:
-	dh_testdir
-	dh_testroot
+override_dh_auto_clean:
 	rm -rf	b43-tools \
 		build-stamp \
 		selftest test.fw
-	
-	$(MAKE) -C assembler distclean
-	$(MAKE) -C disassembler distclean
-	
-	dh_clean
+	dh_auto_clean --sourcedirectory=assembler \
+		      --buildsystem=makefile \
+		      --parallel
+	dh_auto_clean --sourcedirectory=disassembler \
+		      --buildsystem=makefile \
+		      --parallel
 
-install: build selftest
-	dh_testdir
-	dh_testroot
-	dh_prep
-	dh_installdirs
-	
-	$(MAKE) -C assembler PREFIX=$(CURDIR)/debian/b43-asm/usr install
-	$(MAKE) -C disassembler PREFIX=$(CURDIR)/debian/b43-asm/usr install
-
-binary-indep: build install
-
-binary-arch: build install
-	dh_testdir
-	dh_testroot
-	dh_installchangelogs
-	dh_installdocs
-	dh_installexamples
-	#dh_install
-	dh_installman
-	dh_lintian
-	dh_link
-	dh_strip
-	dh_compress
-	dh_fixperms
-	dh_installdeb
-	dh_shlibdeps
-	dh_gencontrol
-	dh_md5sums
-	dh_builddeb
-
-binary: binary-indep binary-arch
+override_dh_auto_install: selftest
+	dh_auto_install --sourcedirectory=assembler \
+			--buildsystem=makefile \
+			--parallel
+	dh_auto_install --sourcedirectory=disassembler \
+			--buildsystem=makefile \
+			--parallel
 
 selftest:
+	@echo
+	@echo SELFTEST:
 	PATH=$(CURDIR)/assembler:$(PATH) b43-asm assembler/test.asm test.fw --cpp-args -DDEBUG=1 -- --ivalext .fw --psize
 	PATH=$(CURDIR)/assembler:$(CURDIR)/disassembler:$(PATH) $(CURDIR)/assembler/selftest.sh test.fw
-	
-	touch $@
+	@echo
+
+%:
+	dh ${@} --parallel
 
 get-orig-source:
 	@rm -rf b43-tools
@@ -96,4 +65,3 @@ get-orig-source:
 				b43-asm-0~$$UTC_DATE/
 	@rm -rf b43-tools
 
-.PHONY: build clean binary-indep binary-arch binary install
