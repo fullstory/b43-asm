@@ -2,10 +2,10 @@
 
 # The build system doesn't use CPPFLAGS, pass them to CFLAGS to enable the
 # missing (hardening) flags
-DEB_CFLAGS_MAINT_APPEND  = $(shell dpkg-buildflags --get CPPFLAGS)
+DEB_CFLAGS_MAINT_APPEND = $(shell dpkg-buildflags --get CPPFLAGS)
 export DEB_CFLAGS_MAINT_APPEND
 
-PREFIX=$(CURDIR)/debian/b43-asm/usr
+PREFIX = $(CURDIR)/debian/b43-asm/usr
 export PREFIX
 
 override_dh_auto_build:
