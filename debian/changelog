@@ -1,3 +1,9 @@
+b43-asm (0~20110912.1818-0+c0.aptosid.11) UNRELEASED; urgency=low
+
+  * NOT RELEASED YET
+
+ -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Fri, 22 Feb 2013 01:22:35 +0100
+
 b43-asm (0~20110912.1818-0+c0.aptosid.10) unstable; urgency=low
 
   * fix clean target, to support building multiple times in a row.
