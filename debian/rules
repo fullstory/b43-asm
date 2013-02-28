@@ -36,6 +36,9 @@ override_dh_auto_install: selftest
 			--buildsystem=makefile \
 			--parallel
 
+override_dh_builddeb:
+	dh_builddeb -- -Zxz -z6
+
 selftest:
 	@echo
 	@echo SELFTEST:
@@ -57,12 +60,13 @@ get-orig-source:
 		cp -r	b43-tools/assembler \
 			b43-tools/disassembler \
 				b43-tools/b43-asm-0~$$UTC_DATE/; \
-		tar	-C b43-tools/ \
+		XZ_OPT=-6 tar \
+			-C b43-tools/ \
 			--posix \
 			--numeric-owner \
 			--owner=0 \
 			--group=0 \
-			-cjf ../b43-asm_0~$$UTC_DATE.orig.tar.bz2 \
+			-cJf ../b43-asm_0~$$UTC_DATE.orig.tar.xz \
 				b43-asm-0~$$UTC_DATE/
 	@rm -rf b43-tools
 

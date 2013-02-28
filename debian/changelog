@@ -1,8 +1,10 @@
-b43-asm (0~20110912.1818-0+c0.aptosid.11) UNRELEASED; urgency=low
+b43-asm (0~20130228.1231-1) unstable; urgency=low
 
-  * NOT RELEASED YET
+  * New upstream snapshot:
+    - fix FTBS against bison 2.7.
+  * switch to xz compressed tarballs and binaries.
 
- -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Fri, 22 Feb 2013 01:22:35 +0100
+ -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Thu, 28 Feb 2013 20:25:46 +0100
 
 b43-asm (0~20110912.1818-0+c0.aptosid.10) unstable; urgency=low
 
