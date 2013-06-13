@@ -1,3 +1,9 @@
+b43-asm (0~20130228.1231-3) UNRELEASED; urgency=low
+
+  * NOT RELEASED YET
+
+ -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Thu, 13 Jun 2013 19:11:41 +0200
+
 b43-asm (0~20130228.1231-2) unstable; urgency=low
 
   * rebuild with gcc-4.8.
