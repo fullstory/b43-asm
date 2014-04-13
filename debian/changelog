@@ -1,8 +1,9 @@
-b43-asm (0~20130228.1231-3) UNRELEASED; urgency=low
+b43-asm (0~20130228.1231-3) unstable; urgency=low
 
-  * NOT RELEASED YET
+  * bump standards version to 3.9.5, no changes necessary.
+  * debian/control: switch Vcs tags to github.
 
- -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Thu, 13 Jun 2013 19:11:41 +0200
+ -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Sun, 13 Apr 2014 20:42:58 +0200
 
 b43-asm (0~20130228.1231-2) unstable; urgency=low
 
