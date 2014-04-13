@@ -1,3 +1,9 @@
+b43-asm (0~20130228.1231-4) UNRELEASED; urgency=medium
+
+  * NOT RELEASED YET
+
+ -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Sun, 13 Apr 2014 20:44:54 +0200
+
 b43-asm (0~20130228.1231-3) unstable; urgency=low
 
   * bump standards version to 3.9.5, no changes necessary.
