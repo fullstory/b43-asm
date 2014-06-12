@@ -1,3 +1,9 @@
+b43-asm (0~20130228.1231-5) UNRELEASED; urgency=medium
+
+  * NOT RELEASED YET
+
+ -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Thu, 12 Jun 2014 02:51:34 +0200
+
 b43-asm (0~20130228.1231-4) unstable; urgency=medium
 
   * fix lintian override syntax (malformed-override Override of debian-watch-
