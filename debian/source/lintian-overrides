@@ -1,0 +1,3 @@
+# there are neither upstream releases nor tarballs to download, the only
+# download location for b43-tools is git://git.bues.ch/b43-tools.git
+b43-asm source: debian-watch-file-is-missing

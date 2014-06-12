@@ -1,6 +1,5 @@
-# there are neither upstream releases nor tarballs to download, the only
-# download location for b43-tools is git://git.bues.ch/b43-tools.git
-b43-asm source: debian-watch-file-is-missing
+# there are no formal upstream changelogs, changes can be derived from the
+# upstream git repository at git://git.bues.ch/b43-tools.git
 b43-asm: no-upstream-changelog
 
 # there is nothing which could be considered an upstream homepage, what comes
