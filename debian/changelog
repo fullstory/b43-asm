@@ -1,8 +1,10 @@
-b43-asm (0~20130228.1231-5) UNRELEASED; urgency=medium
+b43-asm (0~20130228.1231-5) unstable; urgency=medium
 
-  * NOT RELEASED YET
+  * bump standards version to 3.9.6, no changes necessary.
+  * update license shortname from GPL-2 to GPL-2.0, as recommended by the
+    latest versions of DEP-5.
 
- -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Thu, 12 Jun 2014 02:51:34 +0200
+ -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Sat, 03 Jan 2015 18:27:58 +0100
 
 b43-asm (0~20130228.1231-4) unstable; urgency=medium
 
