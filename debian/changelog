@@ -1,3 +1,9 @@
+b43-asm (0~20130228.1231-8) UNRELEASED; urgency=medium
+
+  * NOT RELEASED YET
+
+ -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Tue, 05 Jan 2016 03:06:56 +0100
+
 b43-asm (0~20130228.1231-7) unstable; urgency=medium
 
   * rebuild against current sid.
