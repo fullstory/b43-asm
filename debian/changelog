@@ -1,8 +1,9 @@
-b43-asm (0~20130228.1231-7) UNRELEASED; urgency=medium
+b43-asm (0~20130228.1231-7) unstable; urgency=medium
 
-  * NOT RELEASED YET
+  * rebuild against current sid.
+  * update copyright information.
 
- -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Fri, 31 Jul 2015 23:45:23 +0200
+ -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Tue, 05 Jan 2016 03:06:03 +0100
 
 b43-asm (0~20130228.1231-6) unstable; urgency=medium
 
