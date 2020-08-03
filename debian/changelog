@@ -1,3 +1,9 @@
+b43-asm (0~20130228.1231-9) UNRELEASED; urgency=medium
+
+  * NOT RELEASED YET
+
+ -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Mon, 03 Aug 2020 09:00:55 +0200
+
 b43-asm (0~20130228.1231-8) unstable; urgency=medium
 
   * switch to python3.
