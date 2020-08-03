@@ -1,0 +1,24 @@
+--- a/disassembler/b43-ivaldump
++++ b/disassembler/b43-ivaldump
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ """
+ #   A small script to dump the contents of a b43 initvals file
+ #
+--- a/disassembler/brcm80211-fwconv
++++ b/disassembler/brcm80211-fwconv
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ """
+ #   Copyright (C) 2010  Michael Buesch <m@bues.ch>
+ #
+--- a/disassembler/brcm80211-ivaldump
++++ b/disassembler/brcm80211-ivaldump
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ """
+ #   A small script to dump the contents of a brcm80211 initvals section
+ #
