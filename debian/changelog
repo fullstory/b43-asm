@@ -18,6 +18,8 @@ b43-asm (0~20130228.1231-8) UNRELEASED; urgency=medium
          compression = "xz"
     - W: b43-asm source: debian-rules-uses-unnecessary-dh-argument dh ...
          --parallel
+    - P: b43-asm source: insecure-copyright-format-uri
+         http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 
  -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Tue, 05 Jan 2016 03:06:56 +0100
 
