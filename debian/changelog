@@ -6,9 +6,18 @@ b43-asm (0~20130228.1231-8) UNRELEASED; urgency=medium
   * bump standards version to 4.5.0:
     - switch to https where possible.
   * switch to compat level 13.
+    - drop explicit --parallel or xz invocations.
   * allow R³=no.
   * fix lintian complaints:
     - I: b43-asm: hardening-no-bindnow usr/bin/b43-asm.bin
+    - W: b43-asm source: custom-compression-in-debian-rules dh_builddeb -- -Zxz
+         -z6
+    - W: b43-asm source: custom-compression-in-debian-source-options
+         compression-level = 6
+    - W: b43-asm source: custom-compression-in-debian-source-options
+         compression = "xz"
+    - W: b43-asm source: debian-rules-uses-unnecessary-dh-argument dh ...
+         --parallel
 
  -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Tue, 05 Jan 2016 03:06:56 +0100
 

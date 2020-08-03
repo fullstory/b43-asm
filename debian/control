@@ -9,7 +9,7 @@ Build-Depends: debhelper-compat (= 13),
  flex,
  libfl-dev
 Standards-Version: 4.5.0
-Vcs-git: https://github.com/fullstory/b43-asm.git
+Vcs-Git: https://github.com/fullstory/b43-asm.git
 Vcs-Browser: https://github.com/fullstory/b43-asm
 
 Package: b43-asm

@@ -13,11 +13,9 @@ export PREFIX
 
 override_dh_auto_build:
 	dh_auto_build --sourcedirectory=assembler \
-		      --buildsystem=makefile \
-		      --parallel
+		      --buildsystem=makefile
 	dh_auto_build --sourcedirectory=disassembler \
-		      --buildsystem=makefile \
-		      --parallel
+		      --buildsystem=makefile
 
 override_dh_auto_clean:
 	rm -rf	.pc \
@@ -26,22 +24,15 @@ override_dh_auto_clean:
 		selftest \
 		test.fw
 	dh_auto_clean --sourcedirectory=assembler \
-		      --buildsystem=makefile \
-		      --parallel
+		      --buildsystem=makefile
 	dh_auto_clean --sourcedirectory=disassembler \
-		      --buildsystem=makefile \
-		      --parallel
+		      --buildsystem=makefile
 
 override_dh_auto_install: selftest
 	dh_auto_install --sourcedirectory=assembler \
-			--buildsystem=makefile \
-			--parallel
+			--buildsystem=makefile
 	dh_auto_install --sourcedirectory=disassembler \
-			--buildsystem=makefile \
-			--parallel
-
-override_dh_builddeb:
-	dh_builddeb -- -Zxz -z6
+			--buildsystem=makefile
 
 selftest:
 	@echo
@@ -51,7 +42,7 @@ selftest:
 	@echo
 
 %:
-	dh ${@} --parallel
+	dh ${@}
 
 get-orig-source:
 	@rm -rf b43-tools
