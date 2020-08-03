@@ -1,6 +1,5 @@
-b43-asm (0~20130228.1231-8) UNRELEASED; urgency=medium
+b43-asm (0~20130228.1231-8) unstable; urgency=medium
 
-  * NOT RELEASED YET
   * switch to python3.
   * explicitly add libfl-dev to build dependencies.
   * bump standards version to 4.5.0:
@@ -21,7 +20,7 @@ b43-asm (0~20130228.1231-8) UNRELEASED; urgency=medium
     - P: b43-asm source: insecure-copyright-format-uri
          http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 
- -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Tue, 05 Jan 2016 03:06:56 +0100
+ -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Mon, 03 Aug 2020 09:00:38 +0200
 
 b43-asm (0~20130228.1231-7) unstable; urgency=medium
 
