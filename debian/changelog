@@ -3,6 +3,8 @@ b43-asm (0~20130228.1231-8) UNRELEASED; urgency=medium
   * NOT RELEASED YET
   * switch to python3.
   * explicitly add libfl-dev to build dependencies.
+  * fix lintian complaints:
+    - I: b43-asm: hardening-no-bindnow usr/bin/b43-asm.bin
 
  -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Tue, 05 Jan 2016 03:06:56 +0100
 

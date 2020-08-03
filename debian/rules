@@ -1,5 +1,8 @@
 #!/usr/bin/make -f
 
+# contrary to the documentation, compat level 10 doesn't enable  bindnow yet
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+
 # The build system doesn't use CPPFLAGS, pass them to CFLAGS to enable the
 # missing (hardening) flags
 DEB_CFLAGS_MAINT_APPEND = $(shell dpkg-buildflags --get CPPFLAGS)
