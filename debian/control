@@ -2,13 +2,14 @@ Source: b43-asm
 Section: devel
 Priority: optional
 Maintainer: Stefan Lippers-Hollmann <s.l-h@gmx.de>
-Build-Depends: debhelper (>= 9.20120115),
+Rules-Requires-Root: no
+Build-Depends: debhelper-compat (= 13),
  bison,
  dpkg-dev (>= 1.16.1~),
  flex,
  libfl-dev
-Standards-Version: 3.9.6
-Vcs-git: git://github.com/fullstory/b43-asm.git
+Standards-Version: 4.5.0
+Vcs-git: https://github.com/fullstory/b43-asm.git
 Vcs-Browser: https://github.com/fullstory/b43-asm
 
 Package: b43-asm

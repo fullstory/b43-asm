@@ -55,7 +55,7 @@ selftest:
 
 get-orig-source:
 	@rm -rf b43-tools
-	git clone git://git.bues.ch/b43-tools.git
+	git clone https://git.bues.ch/git/b43-tools.git/
 	@test -d b43-tools
 	GIT_DATE=$$(GIT_DIR=b43-tools/.git/ git log -1 --pretty=format:%cD assembler/ disassembler/); \
 		UTC_DATE=$$(date --utc --date="$$GIT_DATE" +%Y%m%d.%H%M); \
@@ -73,4 +73,3 @@ get-orig-source:
 			-cJf ../b43-asm_0~$$UTC_DATE.orig.tar.xz \
 				b43-asm-0~$$UTC_DATE/
 	@rm -rf b43-tools
-
